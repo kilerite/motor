@@ -1,4 +1,6 @@
   class City < ApplicationRecord
-    has_many :maintenances
+
+   has_many :maintenances
+  
   end
   

@@ -1,14 +1,16 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Materials</h1>
+<h1>Materiales</h1>
 
 <div id="materials">
-  <% @materials.each do |material| %>
-    <%= render material %>
-    <p>
-      <%= link_to "Show this material", material %>
-    </p>
-  <% end %>
+  <ul class="list-group">
+    <% @materials.each do |material| %>
+      <li class="list-group-item">
+        <%= render material %>
+        <%= link_to "Show this material", material, class: "btn btn-primary btn-sm float-right" %>
+      </li>
+    <% end %>
+  </ul>
 </div>
 
-<%= link_to "New material", new_material_path %>
+<%= link_to "Nuevo Materiales", new_material_path, class: "btn btn-success" %>
