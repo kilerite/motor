@@ -1,0 +1,918 @@
+Controlador: controllers_application_controller
+class ApplicationController < ActionController::Base
+end
+
+Controlador: controllers_cities_controller
+class CitiesController < ApplicationController
+  before_action :set_city, only: %i[ show edit update destroy ]
+
+  # GET /cities or /cities.json
+  def index
+    @cities = City.all
+  end
+
+  # GET /cities/1 or /cities/1.json
+  def show
+  end
+
+  # GET /cities/new
+  def new
+    @city = City.new
+  end
+
+  # GET /cities/1/edit
+  def edit
+  end
+
+  # POST /cities or /cities.json
+  def create
+    @city = City.new(city_params)
+
+    respond_to do |format|
+      if @city.save
+        format.html { redirect_to city_url(@city), notice: "City was successfully created." }
+        format.json { render :show, status: :created, location: @city }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @city.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /cities/1 or /cities/1.json
+  def update
+    respond_to do |format|
+      if @city.update(city_params)
+        format.html { redirect_to city_url(@city), notice: "City was successfully updated." }
+        format.json { render :show, status: :ok, location: @city }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @city.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /cities/1 or /cities/1.json
+  def destroy
+    @city.destroy
+
+    respond_to do |format|
+      format.html { redirect_to cities_url, notice: "City was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_city
+      @city = City.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def city_params
+      params.require(:city).permit(:name)
+    end
+end
+
+Controlador: controllers_engines_controller
+class EnginesController < ApplicationController
+  before_action :set_engine, only: %i[ show edit update destroy ]
+
+  # GET /engines or /engines.json
+  def index
+    @engines = Engine.all
+  end
+
+  # GET /engines/1 or /engines/1.json
+  def show
+  end
+
+  # GET /engines/new
+  def new
+    @engine = Engine.new
+  end
+
+  # GET /engines/1/edit
+  def edit
+  end
+
+  # POST /engines or /engines.json
+  def create
+    @engine = Engine.new(engine_params)
+
+    respond_to do |format|
+      if @engine.save
+        format.html { redirect_to engine_url(@engine), notice: "Engine was successfully created." }
+        format.json { render :show, status: :created, location: @engine }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @engine.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /engines/1 or /engines/1.json
+  def update
+    respond_to do |format|
+      if @engine.update(engine_params)
+        format.html { redirect_to engine_url(@engine), notice: "Engine was successfully updated." }
+        format.json { render :show, status: :ok, location: @engine }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @engine.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /engines/1 or /engines/1.json
+  def destroy
+    @engine.destroy
+
+    respond_to do |format|
+      format.html { redirect_to engines_url, notice: "Engine was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_engine
+      @engine = Engine.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def engine_params
+      params.require(:engine).permit(:engine_type, :name, :description, :photo)
+    end
+end
+
+Controlador: controllers_maintenances_controller
+class MaintenancesController < ApplicationController
+  before_action :set_maintenance, only: %i[ show edit update destroy ]
+
+  # GET /maintenances or /maintenances.json
+  def index
+    @maintenances = Maintenance.all
+  end
+
+  # GET /maintenances/1 or /maintenances/1.json
+  def show
+  end
+
+  # GET /maintenances/new
+  def new
+    @maintenance = Maintenance.new
+  end
+
+  # GET /maintenances/1/edit
+  def edit
+  end
+
+  # POST /maintenances or /maintenances.json
+  def create
+    @maintenance = Maintenance.new(maintenance_params)
+
+    respond_to do |format|
+      if @maintenance.save
+        format.html { redirect_to maintenance_url(@maintenance), notice: "Maintenance was successfully created." }
+        format.json { render :show, status: :created, location: @maintenance }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @maintenance.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /maintenances/1 or /maintenances/1.json
+  def update
+    respond_to do |format|
+      if @maintenance.update(maintenance_params)
+        format.html { redirect_to maintenance_url(@maintenance), notice: "Maintenance was successfully updated." }
+        format.json { render :show, status: :ok, location: @maintenance }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @maintenance.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /maintenances/1 or /maintenances/1.json
+  def destroy
+    @maintenance.destroy
+
+    respond_to do |format|
+      format.html { redirect_to maintenances_url, notice: "Maintenance was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_maintenance
+      @maintenance = Maintenance.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def maintenance_params
+      params.require(:maintenance).permit(:maintenance_type, :engine_id, :city_id, :materials_id, :maintenance_date, :technician_email)
+    end
+end
+
+Controlador: controllers_materials_controller
+class MaterialsController < ApplicationController
+  before_action :set_material, only: %i[ show edit update destroy ]
+
+  # GET /materials or /materials.json
+  def index
+    @materials = Material.all
+  end
+
+  # GET /materials/1 or /materials/1.json
+  def show
+  end
+
+  # GET /materials/new
+  def new
+    @material = Material.new
+  end
+
+  # GET /materials/1/edit
+  def edit
+  end
+
+  # POST /materials or /materials.json
+  def create
+    @material = Material.new(material_params)
+
+    respond_to do |format|
+      if @material.save
+        format.html { redirect_to material_url(@material), notice: "Material was successfully created." }
+        format.json { render :show, status: :created, location: @material }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @material.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /materials/1 or /materials/1.json
+  def update
+    respond_to do |format|
+      if @material.update(material_params)
+        format.html { redirect_to material_url(@material), notice: "Material was successfully updated." }
+        format.json { render :show, status: :ok, location: @material }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @material.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /materials/1 or /materials/1.json
+  def destroy
+    @material.destroy
+
+    respond_to do |format|
+      format.html { redirect_to materials_url, notice: "Material was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_material
+      @material = Material.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def material_params
+      params.require(:material).permit(:name)
+    end
+end
+
+Controlador: controllers_application_controller
+class ApplicationController < ActionController::Base
+end
+
+Controlador: controllers_cities_controller
+class CitiesController < ApplicationController
+  before_action :set_city, only: %i[ show edit update destroy ]
+
+  # GET /cities or /cities.json
+  def index
+    @cities = City.all
+  end
+
+  # GET /cities/1 or /cities/1.json
+  def show
+  end
+
+  # GET /cities/new
+  def new
+    @city = City.new
+  end
+
+  # GET /cities/1/edit
+  def edit
+  end
+
+  # POST /cities or /cities.json
+  def create
+    @city = City.new(city_params)
+
+    respond_to do |format|
+      if @city.save
+        format.html { redirect_to city_url(@city), notice: "City was successfully created." }
+        format.json { render :show, status: :created, location: @city }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @city.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /cities/1 or /cities/1.json
+  def update
+    respond_to do |format|
+      if @city.update(city_params)
+        format.html { redirect_to city_url(@city), notice: "City was successfully updated." }
+        format.json { render :show, status: :ok, location: @city }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @city.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /cities/1 or /cities/1.json
+  def destroy
+    @city.destroy
+
+    respond_to do |format|
+      format.html { redirect_to cities_url, notice: "City was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_city
+      @city = City.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def city_params
+      params.require(:city).permit(:name)
+    end
+end
+
+Controlador: controllers_engines_controller
+class EnginesController < ApplicationController
+  before_action :set_engine, only: %i[ show edit update destroy ]
+
+  # GET /engines or /engines.json
+  def index
+    @engines = Engine.all
+  end
+
+  # GET /engines/1 or /engines/1.json
+  def show
+  end
+
+  # GET /engines/new
+  def new
+    @engine = Engine.new
+  end
+
+  # GET /engines/1/edit
+  def edit
+  end
+
+  # POST /engines or /engines.json
+  def create
+    @engine = Engine.new(engine_params)
+
+    respond_to do |format|
+      if @engine.save
+        format.html { redirect_to engine_url(@engine), notice: "Engine was successfully created." }
+        format.json { render :show, status: :created, location: @engine }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @engine.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /engines/1 or /engines/1.json
+  def update
+    respond_to do |format|
+      if @engine.update(engine_params)
+        format.html { redirect_to engine_url(@engine), notice: "Engine was successfully updated." }
+        format.json { render :show, status: :ok, location: @engine }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @engine.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /engines/1 or /engines/1.json
+  def destroy
+    @engine.destroy
+
+    respond_to do |format|
+      format.html { redirect_to engines_url, notice: "Engine was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+
+  def generate_name
+    engine_type = params[:engine_type]
+    last_number = Engine.where(engine_type: engine_type).maximum(:name)
+  
+    if last_number.nil?
+      name = "#{engine_type.upcase}-1"
+    else
+      last_number = last_number.split('-').last.to_i
+      name = "#{engine_type.upcase}-#{last_number + 1}"
+    end
+  
+    render json: { name: name }
+  end
+  
+
+
+
+
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_engine
+      @engine = Engine.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def engine_params
+      params.require(:engine).permit(:engine_type, :name, :description, :photo)
+    end
+end
+
+
+Controlador: controllers_maintenances_controller
+class MaintenancesController < ApplicationController
+  before_action :set_maintenance, only: %i[ show edit update destroy ]
+
+  # GET /maintenances or /maintenances.json
+  def index
+    @maintenances = Maintenance.all
+  end
+
+  # GET /maintenances/1 or /maintenances/1.json
+  def show
+  end
+
+  # GET /maintenances/new
+  def new
+    @maintenance = Maintenance.new
+  end
+
+  # GET /maintenances/1/edit
+  def edit
+  end
+
+  # POST /maintenances or /maintenances.json
+  def create
+    @maintenance = Maintenance.new(maintenance_params)
+
+    respond_to do |format|
+      if @maintenance.save
+        format.html { redirect_to maintenance_url(@maintenance), notice: "Maintenance was successfully created." }
+        format.json { render :show, status: :created, location: @maintenance }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @maintenance.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /maintenances/1 or /maintenances/1.json
+  def update
+    respond_to do |format|
+      if @maintenance.update(maintenance_params)
+        format.html { redirect_to maintenance_url(@maintenance), notice: "Maintenance was successfully updated." }
+        format.json { render :show, status: :ok, location: @maintenance }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @maintenance.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /maintenances/1 or /maintenances/1.json
+  def destroy
+    @maintenance.destroy
+
+    respond_to do |format|
+      format.html { redirect_to maintenances_url, notice: "Maintenance was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_maintenance
+      @maintenance = Maintenance.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def maintenance_params
+      params.require(:maintenance).permit(:maintenance_type, :engine_id, :city_id, :materials_id, :maintenance_date, :technician_email)
+    end
+end
+
+Controlador: controllers_materials_controller
+class MaterialsController < ApplicationController
+  before_action :set_material, only: %i[ show edit update destroy ]
+
+  # GET /materials or /materials.json
+  def index
+    @materials = Material.all
+  end
+
+  # GET /materials/1 or /materials/1.json
+  def show
+  end
+
+  # GET /materials/new
+  def new
+    @material = Material.new
+  end
+
+  # GET /materials/1/edit
+  def edit
+  end
+
+  # POST /materials or /materials.json
+  def create
+    @material = Material.new(material_params)
+
+    respond_to do |format|
+      if @material.save
+        format.html { redirect_to material_url(@material), notice: "Material was successfully created." }
+        format.json { render :show, status: :created, location: @material }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @material.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /materials/1 or /materials/1.json
+  def update
+    respond_to do |format|
+      if @material.update(material_params)
+        format.html { redirect_to material_url(@material), notice: "Material was successfully updated." }
+        format.json { render :show, status: :ok, location: @material }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @material.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /materials/1 or /materials/1.json
+  def destroy
+    @material.destroy
+
+    respond_to do |format|
+      format.html { redirect_to materials_url, notice: "Material was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_material
+      @material = Material.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def material_params
+      params.require(:material).permit(:name)
+    end
+end
+
+Controlador: controllers_application_controller
+class ApplicationController < ActionController::Base
+end
+
+Controlador: controllers_cities_controller
+class CitiesController < ApplicationController
+  before_action :set_city, only: %i[ show edit update destroy ]
+
+  # GET /cities or /cities.json
+  def index
+    @cities = City.all
+  end
+
+  # GET /cities/1 or /cities/1.json
+  def show
+  end
+
+  # GET /cities/new
+  def new
+    @city = City.new
+  end
+
+  # GET /cities/1/edit
+  def edit
+  end
+
+  # POST /cities or /cities.json
+  def create
+    @city = City.new(city_params)
+
+    respond_to do |format|
+      if @city.save
+        format.html { redirect_to city_url(@city), notice: "City was successfully created." }
+        format.json { render :show, status: :created, location: @city }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @city.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /cities/1 or /cities/1.json
+  def update
+    respond_to do |format|
+      if @city.update(city_params)
+        format.html { redirect_to city_url(@city), notice: "City was successfully updated." }
+        format.json { render :show, status: :ok, location: @city }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @city.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /cities/1 or /cities/1.json
+  def destroy
+    @city.destroy
+
+    respond_to do |format|
+      format.html { redirect_to cities_url, notice: "City was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_city
+      @city = City.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def city_params
+      params.require(:city).permit(:name)
+    end
+end
+
+Controlador: controllers_engines_controller
+class EnginesController < ApplicationController
+  before_action :set_engine, only: %i[ show edit update destroy ]
+
+  # GET /engines or /engines.json
+  def index
+    @engines = Engine.all
+  end
+
+  # GET /engines/1 or /engines/1.json
+  def show
+  end
+
+  # GET /engines/new
+  def new
+    @engine = Engine.new
+  end
+
+  # GET /engines/1/edit
+  def edit
+  end
+
+  # POST /engines or /engines.json
+  def create
+    @engine = Engine.new(engine_params)
+
+    respond_to do |format|
+      if @engine.save
+        format.html { redirect_to engine_url(@engine), notice: "Engine was successfully created." }
+        format.json { render :show, status: :created, location: @engine }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @engine.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /engines/1 or /engines/1.json
+  def update
+    respond_to do |format|
+      if @engine.update(engine_params)
+        format.html { redirect_to engine_url(@engine), notice: "Engine was successfully updated." }
+        format.json { render :show, status: :ok, location: @engine }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @engine.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /engines/1 or /engines/1.json
+  def destroy
+    @engine.destroy
+
+    respond_to do |format|
+      format.html { redirect_to engines_url, notice: "Engine was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+
+  def generate_name
+    engine_type = params[:engine_type]
+    last_number = Engine.where(engine_type: engine_type).maximum(:name)
+  
+    if last_number.nil?
+      name = "#{engine_type.upcase}-1"
+    else
+      last_number = last_number.split('-').last.to_i
+      name = "#{engine_type.upcase}-#{last_number + 1}"
+    end
+  
+    render json: { name: name }
+  end
+  
+
+
+
+
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_engine
+      @engine = Engine.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def engine_params
+      params.require(:engine).permit(:engine_type, :name, :description, :photo)
+    end
+end
+
+
+Controlador: controllers_maintenances_controller
+class MaintenancesController < ApplicationController
+  before_action :set_maintenance, only: %i[ show edit update destroy ]
+
+  # GET /maintenances or /maintenances.json
+  def index
+    @maintenances = Maintenance.all
+  end
+
+  # GET /maintenances/1 or /maintenances/1.json
+  def show
+  end
+
+  # GET /maintenances/new
+  def new
+    @maintenance = Maintenance.new
+  end
+
+  # GET /maintenances/1/edit
+  def edit
+  end
+
+  # POST /maintenances or /maintenances.json
+  def create
+    @maintenance = Maintenance.new(maintenance_params)
+
+    respond_to do |format|
+      if @maintenance.save
+        format.html { redirect_to maintenance_url(@maintenance), notice: "Maintenance was successfully created." }
+        format.json { render :show, status: :created, location: @maintenance }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @maintenance.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /maintenances/1 or /maintenances/1.json
+  def update
+    respond_to do |format|
+      if @maintenance.update(maintenance_params)
+        format.html { redirect_to maintenance_url(@maintenance), notice: "Maintenance was successfully updated." }
+        format.json { render :show, status: :ok, location: @maintenance }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @maintenance.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /maintenances/1 or /maintenances/1.json
+  def destroy
+    @maintenance.destroy
+
+    respond_to do |format|
+      format.html { redirect_to maintenances_url, notice: "Maintenance was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_maintenance
+      @maintenance = Maintenance.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def maintenance_params
+      params.require(:maintenance).permit(:maintenance_type, :engine_id, :city_id, :materials_id, :maintenance_date, :technician_email)
+    end
+end
+
+Controlador: controllers_materials_controller
+class MaterialsController < ApplicationController
+  before_action :set_material, only: %i[ show edit update destroy ]
+
+  # GET /materials or /materials.json
+  def index
+    @materials = Material.all
+  end
+
+  # GET /materials/1 or /materials/1.json
+  def show
+  end
+
+  # GET /materials/new
+  def new
+    @material = Material.new
+  end
+
+  # GET /materials/1/edit
+  def edit
+  end
+
+  # POST /materials or /materials.json
+  def create
+    @material = Material.new(material_params)
+
+    respond_to do |format|
+      if @material.save
+        format.html { redirect_to material_url(@material), notice: "Material was successfully created." }
+        format.json { render :show, status: :created, location: @material }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @material.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /materials/1 or /materials/1.json
+  def update
+    respond_to do |format|
+      if @material.update(material_params)
+        format.html { redirect_to material_url(@material), notice: "Material was successfully updated." }
+        format.json { render :show, status: :ok, location: @material }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @material.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /materials/1 or /materials/1.json
+  def destroy
+    @material.destroy
+
+    respond_to do |format|
+      format.html { redirect_to materials_url, notice: "Material was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_material
+      @material = Material.find(params[:id])
+    end
+
+    # Only allow a list of trusted parameters through.
+    def material_params
+      params.require(:material).permit(:name)
+    end
+end
+

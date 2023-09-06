@@ -1,0 +1,30 @@
+<div class="container">
+  <h1 class="mt-4">Listado de Mantenimientos de Motores</h1>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Tipo de Motor</th>
+        <th>Tipo de Mantenimiento</th>
+        <th>Nombre del Motor</th>
+        <th>Foto</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @maintenances.each do |maintenance| %>
+        <tr>
+          <td><%= maintenance.engine.engine_type %></td>
+          <td><%= maintenance.maintenance_type %></td>
+          <td><%= maintenance.engine.name %></td>
+          <td><%= image_tag(maintenance.engine.photo.url, class: 'img-thumbnail') if maintenance.engine.photo.present? %></td>
+          <td>
+            <%= link_to 'Mostrar', maintenance, class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Editar', edit_maintenance_path(maintenance), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Eliminar', maintenance, method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'Nuevo Mantenimiento', new_maintenance_path, class: 'btn btn-success' %>
+</div>

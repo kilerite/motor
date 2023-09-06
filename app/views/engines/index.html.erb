@@ -1,0 +1,30 @@
+<div class="container">
+  <h1 class="mt-4">Listado de Motores</h1>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Tipo de Motor</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Foto</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @engines.each do |engine| %>
+        <tr>
+          <td><%= engine.engine_type %></td>
+          <td><%= engine.name %></td>
+          <td><%= engine.description %></td>
+          <td><%= image_tag(engine.photo.url, class: 'img-thumbnail') if engine.photo.present? %></td>
+          <td>
+            <%= link_to 'Mostrar', engine, class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Editar', edit_engine_path(engine), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Eliminar', engine, method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%# <%= link_to 'Nuevo Motor', new_engine_path, class: 'btn btn-success' %> 
+</div>

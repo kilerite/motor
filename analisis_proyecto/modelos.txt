@@ -1,0 +1,171 @@
+Modelo: application_record
+class ApplicationRecord < ActiveRecord::Base
+  primary_abstract_class
+end
+
+Modelo: city
+  class City < ApplicationRecord
+    has_many :maintenances
+  end
+  
+
+Modelo: engine
+class Engine < ApplicationRecord
+  
+    has_many :maintenances
+  end
+  
+
+Modelo: maintenance
+
+
+class Maintenance < ApplicationRecord
+  belongs_to :engine
+  belongs_to :city
+  has_and_belongs_to_many :materials
+end
+
+Modelo: material
+class Material < ApplicationRecord
+    validates :name, presence: true
+    has_and_belongs_to_many :maintenances
+  end
+  
+
+Modelo: user
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+   enum role = [:administrador, :operador] 
+
+end
+
+Modelo: application_record
+class ApplicationRecord < ActiveRecord::Base
+  primary_abstract_class
+end
+
+Modelo: city
+  class City < ApplicationRecord
+    has_many :maintenances
+  end
+  
+
+Modelo: engine
+  class Engine < ApplicationRecord
+    validate :valid_engine_name
+    before_save :generate_engine_name
+  
+    enum engine_type: { 'Motor a reacción' => 'motor_a_reaccion', 'Motor turbohélice' => 'motor_turbohelice' }
+  
+    has_many :maintenances
+    has_one_attached :photo
+  
+    private
+  
+    def valid_engine_name
+      unless name.match(/\A(REAC|TURBO)-\d+\z/)
+        errors.add(:name, "debe seguir el formato REAC-n o TURBO-n")
+      end
+    end
+  
+    def generate_engine_name
+      # Obtener el último número utilizado para el tipo de motor actual
+      last_number = Engine.where(engine_type: engine_type).maximum(:number).to_i
+      # Incrementar el número en 1
+      self.number = last_number + 1
+      # Crear el nombre con el formato correcto
+      self.name = "#{engine_type.upcase}-#{number}"
+    end
+  end
+  
+
+Modelo: maintenance
+
+
+class Maintenance < ApplicationRecord
+  belongs_to :engine
+  belongs_to :city
+  has_and_belongs_to_many :materials
+end
+
+Modelo: material
+class Material < ApplicationRecord
+    validates :name, presence: true
+    has_and_belongs_to_many :maintenances
+  end
+  
+
+Modelo: user
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+   enum role = [:administrador, :operador] 
+
+end
+
+Modelo: application_record
+class ApplicationRecord < ActiveRecord::Base
+  primary_abstract_class
+end
+
+Modelo: city
+  class City < ApplicationRecord
+    has_many :maintenances
+  end
+  
+
+Modelo: engine
+
+
+  class Engine < ApplicationRecord
+    enum engine_type: { 'Motor a reacción' => 'motor_a_reaccion', 'Motor turbohélice' => 'motor_turbohelice' }
+    has_many :maintenances
+    has_one_attached :photo
+    validates :engine_type, presence: true
+    validates :description, presence: true
+    validates :name, presence: true, uniqueness: true, format: { with: /\A(REAC|TURBO)-\d+\z/ }
+  
+    before_create :set_default_photo
+  
+    private
+  
+    def set_default_photo
+      unless self.photo.attached?
+        default_photo_path = Rails.root.join('app', 'assets', 'images', 'default_engine.jpg')
+        self.photo.attach(io: File.open(default_photo_path), filename: 'default_engine.jpg', content_type: 'image/jpeg')
+      end
+    end
+  end
+  
+
+Modelo: maintenance
+
+
+class Maintenance < ApplicationRecord
+  belongs_to :engine
+  belongs_to :city
+  has_and_belongs_to_many :materials
+end
+
+Modelo: material
+class Material < ApplicationRecord
+    validates :name, presence: true
+    has_and_belongs_to_many :maintenances
+  end
+  
+
+Modelo: user
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+   enum role = [:administrador, :operador] 
+
+end
+

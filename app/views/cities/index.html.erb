@@ -1,0 +1,16 @@
+<div class="container mt-5">
+  <h1 class="text-center">Ciudades</h1>
+
+  <ul class="list-group">
+    <% @cities.each do |city| %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <%= city.name %>
+        <%= link_to "Edición", city, class: "btn btn-primary btn-sm" %>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="text-center mt-3">
+    <%= link_to "Nueva Ciudad", new_city_path, class: "btn btn-success" %>
+  </div>
+</div>

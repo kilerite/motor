@@ -1,0 +1,2315 @@
+Vista: cities/_city.html.erb
+<div id="<%= dom_id city %>">
+  <p>
+    <strong>Name:</strong>
+    <%= city.name %>
+  </p>
+
+</div>
+
+Vista: cities/_city.json.jbuilder
+json.extract! city, :id, :name, :created_at, :updated_at
+json.url city_url(city, format: :json)
+
+Vista: cities/_form.html.erb
+<%= form_with(model: city) do |form| %>
+  <% if city.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(city.errors.count, "error") %> prohibited this city from being saved:</h2>
+
+      <ul>
+        <% city.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+Vista: cities/edit.html.erb
+<h1>Editing city</h1>
+
+<%= render "form", city: @city %>
+
+<br>
+
+<div>
+  <%= link_to "Show this city", @city %> |
+  <%= link_to "Back to cities", cities_path %>
+</div>
+
+Vista: cities/index.html.erb
+<p style="color: green"><%= notice %></p>
+
+<h1>Cities</h1>
+
+<div id="cities">
+  <% @cities.each do |city| %>
+    <%= render city %>
+    <p>
+      <%= link_to "Show this city", city %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New city", new_city_path %>
+
+Vista: cities/index.json.jbuilder
+json.array! @cities, partial: "cities/city", as: :city
+
+Vista: cities/new.html.erb
+<h1>New city</h1>
+
+<%= render "form", city: @city %>
+
+<br>
+
+<div>
+  <%= link_to "Back to cities", cities_path %>
+</div>
+
+Vista: cities/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @city %>
+
+<div>
+  <%= link_to "Edit this city", edit_city_path(@city) %> |
+  <%= link_to "Back to cities", cities_path %>
+
+  <%= button_to "Destroy this city", @city, method: :delete %>
+</div>
+
+Vista: cities/show.json.jbuilder
+json.partial! "cities/city", city: @city
+
+Vista: confirmations/new.html.erb
+<h2>Resend confirmation instructions</h2>
+
+<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Resend confirmation instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: mailer/confirmation_instructions.html.erb
+<p>Welcome <%= @email %>!</p>
+
+<p>You can confirm your account email through the link below:</p>
+
+<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+Vista: mailer/email_changed.html.erb
+<p>Hello <%= @email %>!</p>
+
+<% if @resource.try(:unconfirmed_email?) %>
+  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+<% else %>
+  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+<% end %>
+
+Vista: mailer/password_change.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>We're contacting you to notify you that your password has been changed.</p>
+
+Vista: mailer/reset_password_instructions.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>Someone has requested a link to change your password. You can do this through the link below.</p>
+
+<p><%= link_to 'Change my password', edit_password_url(@resource, reset_password_token: @token) %></p>
+
+<p>If you didn't request this, please ignore this email.</p>
+<p>Your password won't change until you access the link above and create a new one.</p>
+
+Vista: mailer/unlock_instructions.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>Your account has been locked due to an excessive number of unsuccessful sign in attempts.</p>
+
+<p>Click the link below to unlock your account:</p>
+
+<p><%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token) %></p>
+
+Vista: passwords/edit.html.erb
+<h2>Change your password</h2>
+
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= f.hidden_field :reset_password_token %>
+
+  <div class="field">
+    <%= f.label :password, "New password" %><br />
+    <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+    <% end %>
+    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation, "Confirm new password" %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Change my password" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: passwords/new.html.erb
+<h2>Forgot your password?</h2>
+
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Send me reset password instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: registrations/edit.html.erb
+<h2>Edit <%= resource_name.to_s.humanize %></h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <br />
+      <em><%= @minimum_password_length %> characters minimum</em>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Update" %>
+  </div>
+<% end %>
+
+<h3>Cancel my account</h3>
+
+<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+
+<%= link_to "Back", :back %>
+
+Vista: registrations/new.html.erb
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign up" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: sessions/new.html.erb
+<h2>Log in</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password, autocomplete: "current-password" %>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+    <div class="field">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Log in" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: shared/_error_messages.html.erb
+<% if resource.errors.any? %>
+  <div id="error_explanation" data-turbo-cache="false">
+    <h2>
+      <%= I18n.t("errors.messages.not_saved",
+                 count: resource.errors.count,
+                 resource: resource.class.model_name.human.downcase)
+       %>
+    </h2>
+    <ul>
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+Vista: shared/_links.html.erb
+<%- if controller_name != 'sessions' %>
+  <%= link_to "Log in", new_session_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+  <%= link_to "Sign up", new_registration_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+  <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.omniauthable? %>
+  <%- resource_class.omniauth_providers.each do |provider| %>
+    <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %><br />
+  <% end %>
+<% end %>
+
+Vista: unlocks/new.html.erb
+<h2>Resend unlock instructions</h2>
+
+<%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Resend unlock instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: engines/_engine.html.erb
+<div id="<%= dom_id engine %>">
+  <p>
+    <strong>Engine type:</strong>
+    <%= engine.engine_type %>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <%= engine.name %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= engine.description %>
+  </p>
+
+  <p>
+    <strong>Photo:</strong>
+    <%= engine.photo %>
+  </p>
+
+</div>
+
+Vista: engines/_engine.json.jbuilder
+json.extract! engine, :id, :engine_type, :name, :description, :photo, :created_at, :updated_at
+json.url engine_url(engine, format: :json)
+
+Vista: engines/_form.html.erb
+<%= form_with(model: engine) do |form| %>
+  <% if engine.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(engine.errors.count, "error") %> prohibited this engine from being saved:</h2>
+
+      <ul>
+        <% engine.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :engine_type, style: "display: block" %>
+    <%= form.text_field :engine_type %>
+  </div>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.label :photo, style: "display: block" %>
+    <%= form.text_field :photo %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+Vista: engines/edit.html.erb
+<h1>Editing engine</h1>
+
+<%= render "form", engine: @engine %>
+
+<br>
+
+<div>
+  <%= link_to "Show this engine", @engine %> |
+  <%= link_to "Back to engines", engines_path %>
+</div>
+
+Vista: engines/index.html.erb
+<p style="color: green"><%= notice %></p>
+
+<h1>Engines</h1>
+
+<div id="engines">
+  <% @engines.each do |engine| %>
+    <%= render engine %>
+    <p>
+      <%= link_to "Show this engine", engine %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New engine", new_engine_path %>
+
+Vista: engines/index.json.jbuilder
+json.array! @engines, partial: "engines/engine", as: :engine
+
+Vista: engines/new.html.erb
+<h1>New engine</h1>
+
+<%= render "form", engine: @engine %>
+
+<br>
+
+<div>
+  <%= link_to "Back to engines", engines_path %>
+</div>
+
+Vista: engines/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @engine %>
+
+<div>
+  <%= link_to "Edit this engine", edit_engine_path(@engine) %> |
+  <%= link_to "Back to engines", engines_path %>
+
+  <%= button_to "Destroy this engine", @engine, method: :delete %>
+</div>
+
+Vista: engines/show.json.jbuilder
+json.partial! "engines/engine", engine: @engine
+
+Vista: layouts/application.html.erb
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JetMaintain</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+<p class="notice"><%= notice %></p>
+       <p class="alert"><%= alert %></p>
+    <%= yield %>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/78ae44b048.js" crossorigin="anonymous"></script>
+
+
+  </body>
+</html>
+
+Vista: layouts/mailer.html.erb
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      /* Email styles need to be inline */
+    </style>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
+
+Vista: layouts/mailer.text.erb
+<%= yield %>
+
+Vista: maintenances/_form.html.erb
+<%= form_with(model: maintenance) do |form| %>
+  <% if maintenance.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(maintenance.errors.count, "error") %> prohibited this maintenance from being saved:</h2>
+
+      <ul>
+        <% maintenance.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :maintenance_type, style: "display: block" %>
+    <%= form.text_field :maintenance_type %>
+  </div>
+
+  <div>
+    <%= form.label :engine_id, style: "display: block" %>
+    <%= form.text_field :engine_id %>
+  </div>
+
+  <div>
+    <%= form.label :city_id, style: "display: block" %>
+    <%= form.text_field :city_id %>
+  </div>
+
+  <div>
+    <%= form.label :materials_id, style: "display: block" %>
+    <%= form.text_field :materials_id %>
+  </div>
+
+  <div>
+    <%= form.label :maintenance_date, style: "display: block" %>
+    <%= form.date_field :maintenance_date %>
+  </div>
+
+  <div>
+    <%= form.label :technician_email, style: "display: block" %>
+    <%= form.text_field :technician_email %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+Vista: maintenances/_maintenance.html.erb
+<div id="<%= dom_id maintenance %>">
+  <p>
+    <strong>Maintenance type:</strong>
+    <%= maintenance.maintenance_type %>
+  </p>
+
+  <p>
+    <strong>Engine:</strong>
+    <%= maintenance.engine_id %>
+  </p>
+
+  <p>
+    <strong>City:</strong>
+    <%= maintenance.city_id %>
+  </p>
+
+  <p>
+    <strong>Materials:</strong>
+    <%= maintenance.materials_id %>
+  </p>
+
+  <p>
+    <strong>Maintenance date:</strong>
+    <%= maintenance.maintenance_date %>
+  </p>
+
+  <p>
+    <strong>Technician email:</strong>
+    <%= maintenance.technician_email %>
+  </p>
+
+</div>
+
+Vista: maintenances/_maintenance.json.jbuilder
+json.extract! maintenance, :id, :maintenance_type, :engine_id, :city_id, :materials_id, :maintenance_date, :technician_email, :created_at, :updated_at
+json.url maintenance_url(maintenance, format: :json)
+
+Vista: maintenances/edit.html.erb
+<h1>Editing maintenance</h1>
+
+<%= render "form", maintenance: @maintenance %>
+
+<br>
+
+<div>
+  <%= link_to "Show this maintenance", @maintenance %> |
+  <%= link_to "Back to maintenances", maintenances_path %>
+</div>
+
+Vista: maintenances/index.html.erb
+<p style="color: green"><%= notice %></p>
+
+<h1>Maintenances</h1>
+
+<div id="maintenances">
+  <% @maintenances.each do |maintenance| %>
+    <%= render maintenance %>
+    <p>
+      <%= link_to "Show this maintenance", maintenance %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New maintenance", new_maintenance_path %>
+
+Vista: maintenances/index.json.jbuilder
+json.array! @maintenances, partial: "maintenances/maintenance", as: :maintenance
+
+Vista: maintenances/new.html.erb
+<h1>New maintenance</h1>
+
+<%= render "form", maintenance: @maintenance %>
+
+<br>
+
+<div>
+  <%= link_to "Back to maintenances", maintenances_path %>
+</div>
+
+Vista: maintenances/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @maintenance %>
+
+<div>
+  <%= link_to "Edit this maintenance", edit_maintenance_path(@maintenance) %> |
+  <%= link_to "Back to maintenances", maintenances_path %>
+
+  <%= button_to "Destroy this maintenance", @maintenance, method: :delete %>
+</div>
+
+Vista: maintenances/show.json.jbuilder
+json.partial! "maintenances/maintenance", maintenance: @maintenance
+
+Vista: materials/_form.html.erb
+<%= form_with(model: material) do |form| %>
+  <% if material.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(material.errors.count, "error") %> prohibited this material from being saved:</h2>
+
+      <ul>
+        <% material.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+Vista: materials/_material.html.erb
+<div id="<%= dom_id material %>">
+  <p>
+    <strong>Name:</strong>
+    <%= material.name %>
+  </p>
+
+</div>
+
+Vista: materials/_material.json.jbuilder
+json.extract! material, :id, :name, :created_at, :updated_at
+json.url material_url(material, format: :json)
+
+Vista: materials/edit.html.erb
+<h1>Editing material</h1>
+
+<%= render "form", material: @material %>
+
+<br>
+
+<div>
+  <%= link_to "Show this material", @material %> |
+  <%= link_to "Back to materials", materials_path %>
+</div>
+
+Vista: materials/index.html.erb
+<p style="color: green"><%= notice %></p>
+
+<h1>Materials</h1>
+
+<div id="materials">
+  <% @materials.each do |material| %>
+    <%= render material %>
+    <p>
+      <%= link_to "Show this material", material %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New material", new_material_path %>
+
+Vista: materials/index.json.jbuilder
+json.array! @materials, partial: "materials/material", as: :material
+
+Vista: materials/new.html.erb
+<h1>New material</h1>
+
+<%= render "form", material: @material %>
+
+<br>
+
+<div>
+  <%= link_to "Back to materials", materials_path %>
+</div>
+
+Vista: materials/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @material %>
+
+<div>
+  <%= link_to "Edit this material", edit_material_path(@material) %> |
+  <%= link_to "Back to materials", materials_path %>
+
+  <%= button_to "Destroy this material", @material, method: :delete %>
+</div>
+
+Vista: materials/show.json.jbuilder
+json.partial! "materials/material", material: @material
+
+Vista: cities/_city.html.erb
+<div id="<%= dom_id city %>">
+  <p>
+    <strong>Name:</strong>
+    <%= city.name %>
+  </p>
+
+</div>
+
+Vista: cities/_city.json.jbuilder
+json.extract! city, :id, :name, :created_at, :updated_at
+json.url city_url(city, format: :json)
+
+Vista: cities/_form.html.erb
+<%= form_with(model: city) do |form| %>
+  <% if city.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(city.errors.count, "error") %> prohibited this city from being saved:</h2>
+
+      <ul>
+        <% city.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+Vista: cities/edit.html.erb
+<h1>Editing city</h1>
+
+<%= render "form", city: @city %>
+
+<br>
+
+<div>
+  <%= link_to "Show this city", @city %> |
+  <%= link_to "Back to cities", cities_path %>
+</div>
+
+Vista: cities/index.html.erb
+<p style="color: green"><%= notice %></p>
+
+<h1>Cities</h1>
+
+<div id="cities">
+  <% @cities.each do |city| %>
+    <%= render city %>
+    <p>
+      <%= link_to "Show this city", city %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New city", new_city_path %>
+
+Vista: cities/index.json.jbuilder
+json.array! @cities, partial: "cities/city", as: :city
+
+Vista: cities/new.html.erb
+<h1>New city</h1>
+
+<%= render "form", city: @city %>
+
+<br>
+
+<div>
+  <%= link_to "Back to cities", cities_path %>
+</div>
+
+Vista: cities/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @city %>
+
+<div>
+  <%= link_to "Edit this city", edit_city_path(@city) %> |
+  <%= link_to "Back to cities", cities_path %>
+
+  <%= button_to "Destroy this city", @city, method: :delete %>
+</div>
+
+Vista: cities/show.json.jbuilder
+json.partial! "cities/city", city: @city
+
+Vista: confirmations/new.html.erb
+<h2>Resend confirmation instructions</h2>
+
+<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Resend confirmation instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: mailer/confirmation_instructions.html.erb
+<p>Welcome <%= @email %>!</p>
+
+<p>You can confirm your account email through the link below:</p>
+
+<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+Vista: mailer/email_changed.html.erb
+<p>Hello <%= @email %>!</p>
+
+<% if @resource.try(:unconfirmed_email?) %>
+  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+<% else %>
+  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+<% end %>
+
+Vista: mailer/password_change.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>We're contacting you to notify you that your password has been changed.</p>
+
+Vista: mailer/reset_password_instructions.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>Someone has requested a link to change your password. You can do this through the link below.</p>
+
+<p><%= link_to 'Change my password', edit_password_url(@resource, reset_password_token: @token) %></p>
+
+<p>If you didn't request this, please ignore this email.</p>
+<p>Your password won't change until you access the link above and create a new one.</p>
+
+Vista: mailer/unlock_instructions.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>Your account has been locked due to an excessive number of unsuccessful sign in attempts.</p>
+
+<p>Click the link below to unlock your account:</p>
+
+<p><%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token) %></p>
+
+Vista: passwords/edit.html.erb
+<h2>Change your password</h2>
+
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= f.hidden_field :reset_password_token %>
+
+  <div class="field">
+    <%= f.label :password, "New password" %><br />
+    <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+    <% end %>
+    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation, "Confirm new password" %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Change my password" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: passwords/new.html.erb
+<h2>Forgot your password?</h2>
+
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Send me reset password instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: registrations/edit.html.erb
+<h2>Edit <%= resource_name.to_s.humanize %></h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <br />
+      <em><%= @minimum_password_length %> characters minimum</em>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Update" %>
+  </div>
+<% end %>
+
+<h3>Cancel my account</h3>
+
+<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+
+<%= link_to "Back", :back %>
+
+Vista: registrations/new.html.erb
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign up" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: sessions/new.html.erb
+<h2>Log in</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password, autocomplete: "current-password" %>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+    <div class="field">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Log in" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: shared/_error_messages.html.erb
+<% if resource.errors.any? %>
+  <div id="error_explanation" data-turbo-cache="false">
+    <h2>
+      <%= I18n.t("errors.messages.not_saved",
+                 count: resource.errors.count,
+                 resource: resource.class.model_name.human.downcase)
+       %>
+    </h2>
+    <ul>
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+Vista: shared/_links.html.erb
+<%- if controller_name != 'sessions' %>
+  <%= link_to "Log in", new_session_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+  <%= link_to "Sign up", new_registration_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+  <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.omniauthable? %>
+  <%- resource_class.omniauth_providers.each do |provider| %>
+    <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %><br />
+  <% end %>
+<% end %>
+
+Vista: unlocks/new.html.erb
+<h2>Resend unlock instructions</h2>
+
+<%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Resend unlock instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: engines/_engine.html.erb
+<div id="<%= dom_id engine %>">
+  <p>
+    <strong>Engine type:</strong>
+    <%= engine.engine_type %>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <%= engine.name %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= engine.description %>
+  </p>
+
+  <p>
+    <strong>Photo:</strong>
+    <%= engine.photo %>
+  </p>
+
+</div>
+
+Vista: engines/_engine.json.jbuilder
+json.extract! engine, :id, :engine_type, :name, :description, :photo, :created_at, :updated_at
+json.url engine_url(engine, format: :json)
+
+Vista: engines/_form.html.erb
+<%= form_for @engine do |f| %>
+  <div class="form-group">
+    <%= f.label :engine_type, 'Tipo de Motor' %>
+    <%= f.select :engine_type, Engine.engine_types.keys, {}, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :name, 'Nombre' %>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description, 'Descripción' %>
+    <%= f.text_area :description, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :photo, 'Foto del Motor' %>
+    <%= f.file_field :photo, class: 'form-control' %>
+  </div>
+  <%= f.submit 'Guardar', class: 'btn btn-primary' %>
+<% end %>
+
+Vista: engines/edit.html.erb
+<h1>Editing engine</h1>
+
+<%= render "form", engine: @engine %>
+
+<br>
+
+<div>
+  <%= link_to "Show this engine", @engine %> |
+  <%= link_to "Back to engines", engines_path %>
+</div>
+
+Vista: engines/index.html.erb
+<div class="container">
+  <h1 class="mt-4">Listado de Motores</h1>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Tipo de Motor</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Foto</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @engines.each do |engine| %>
+        <tr>
+          <td><%= engine.engine_type %></td>
+          <td><%= engine.name %></td>
+          <td><%= engine.description %></td>
+          <td><%= image_tag(engine.photo.url, class: 'img-thumbnail') if engine.photo.present? %></td>
+          <td>
+            <%= link_to 'Mostrar', engine, class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Editar', edit_engine_path(engine), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Eliminar', engine, method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%# <%= link_to 'Nuevo Motor', new_engine_path, class: 'btn btn-success' %> 
+</div>
+
+Vista: engines/index.json.jbuilder
+json.array! @engines, partial: "engines/engine", as: :engine
+
+Vista: engines/new.html.erb
+<h1>New engine</h1>
+
+<%= render "form", engine: @engine %>
+
+<br>
+
+<div>
+  <%= link_to "Back to engines", engines_path %>
+</div>
+
+Vista: engines/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @engine %>
+
+<div>
+  <%= link_to "Edit this engine", edit_engine_path(@engine) %> |
+  <%= link_to "Back to engines", engines_path %>
+
+  <%= button_to "Destroy this engine", @engine, method: :delete %>
+</div>
+
+Vista: engines/show.json.jbuilder
+json.partial! "engines/engine", engine: @engine
+
+Vista: layouts/application.html.erb
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JetMaintain</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  
+  
+<%= javascript_include_tag 'engines' %>
+
+  
+  </head>
+
+  <body>
+<p class="notice"><%= notice %></p>
+       <p class="alert"><%= alert %></p>
+    <%= yield %>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/78ae44b048.js" crossorigin="anonymous"></script>
+
+
+  </body>
+</html>
+
+Vista: layouts/mailer.html.erb
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      /* Email styles need to be inline */
+    </style>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
+
+Vista: layouts/mailer.text.erb
+<%= yield %>
+
+Vista: maintenances/_form.html.erb
+<%= form_with(model: maintenance) do |form| %>
+  <% if maintenance.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(maintenance.errors.count, "error") %> prohibited this maintenance from being saved:</h2>
+
+      <ul>
+        <% maintenance.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :maintenance_type, style: "display: block" %>
+    <%= form.text_field :maintenance_type %>
+  </div>
+
+  <div>
+    <%= form.label :engine_id, style: "display: block" %>
+    <%= form.text_field :engine_id %>
+  </div>
+
+  <div>
+    <%= form.label :city_id, style: "display: block" %>
+    <%= form.text_field :city_id %>
+  </div>
+
+  <div>
+    <%= form.label :materials_id, style: "display: block" %>
+    <%= form.text_field :materials_id %>
+  </div>
+
+  <div>
+    <%= form.label :maintenance_date, style: "display: block" %>
+    <%= form.date_field :maintenance_date %>
+  </div>
+
+  <div>
+    <%= form.label :technician_email, style: "display: block" %>
+    <%= form.text_field :technician_email %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+Vista: maintenances/_maintenance.html.erb
+<div id="<%= dom_id maintenance %>">
+  <p>
+    <strong>Maintenance type:</strong>
+    <%= maintenance.maintenance_type %>
+  </p>
+
+  <p>
+    <strong>Engine:</strong>
+    <%= maintenance.engine_id %>
+  </p>
+
+  <p>
+    <strong>City:</strong>
+    <%= maintenance.city_id %>
+  </p>
+
+  <p>
+    <strong>Materials:</strong>
+    <%= maintenance.materials_id %>
+  </p>
+
+  <p>
+    <strong>Maintenance date:</strong>
+    <%= maintenance.maintenance_date %>
+  </p>
+
+  <p>
+    <strong>Technician email:</strong>
+    <%= maintenance.technician_email %>
+  </p>
+
+</div>
+
+Vista: maintenances/_maintenance.json.jbuilder
+json.extract! maintenance, :id, :maintenance_type, :engine_id, :city_id, :materials_id, :maintenance_date, :technician_email, :created_at, :updated_at
+json.url maintenance_url(maintenance, format: :json)
+
+Vista: maintenances/edit.html.erb
+<h1>Editing maintenance</h1>
+
+<%= render "form", maintenance: @maintenance %>
+
+<br>
+
+<div>
+  <%= link_to "Show this maintenance", @maintenance %> |
+  <%= link_to "Back to maintenances", maintenances_path %>
+</div>
+
+Vista: maintenances/index.html.erb
+<div class="container">
+  <h1 class="mt-4">Listado de Mantenimientos de Motores</h1>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Tipo de Motor</th>
+        <th>Tipo de Mantenimiento</th>
+        <th>Nombre del Motor</th>
+        <th>Foto</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @maintenances.each do |maintenance| %>
+        <tr>
+          <td><%= maintenance.engine.engine_type %></td>
+          <td><%= maintenance.maintenance_type %></td>
+          <td><%= maintenance.engine.name %></td>
+          <td><%= image_tag(maintenance.engine.photo.url, class: 'img-thumbnail') if maintenance.engine.photo.present? %></td>
+          <td>
+            <%= link_to 'Mostrar', maintenance, class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Editar', edit_maintenance_path(maintenance), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Eliminar', maintenance, method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'Nuevo Mantenimiento', new_maintenance_path, class: 'btn btn-success' %>
+</div>
+
+Vista: maintenances/index.json.jbuilder
+json.array! @maintenances, partial: "maintenances/maintenance", as: :maintenance
+
+Vista: maintenances/new.html.erb
+<h1>New maintenance</h1>
+
+<%= render "form", maintenance: @maintenance %>
+
+<br>
+
+<div>
+  <%= link_to "Back to maintenances", maintenances_path %>
+</div>
+
+Vista: maintenances/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @maintenance %>
+
+<div>
+  <%= link_to "Edit this maintenance", edit_maintenance_path(@maintenance) %> |
+  <%= link_to "Back to maintenances", maintenances_path %>
+
+  <%= button_to "Destroy this maintenance", @maintenance, method: :delete %>
+</div>
+
+Vista: maintenances/show.json.jbuilder
+json.partial! "maintenances/maintenance", maintenance: @maintenance
+
+Vista: materials/_form.html.erb
+<%= form_for @material do |f| %>
+  <div class="form-group">
+    <%= f.label :name, 'Nombre del Material' %>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+  <%= f.submit 'Guardar', class: 'btn btn-primary' %>
+<% end %>
+
+Vista: materials/_material.html.erb
+<div id="<%= dom_id material %>">
+  <p>
+    <strong>Name:</strong>
+    <%= material.name %>
+  </p>
+
+</div>
+
+Vista: materials/_material.json.jbuilder
+json.extract! material, :id, :name, :created_at, :updated_at
+json.url material_url(material, format: :json)
+
+Vista: materials/edit.html.erb
+<h1>Editing material</h1>
+
+<%= render "form", material: @material %>
+
+<br>
+
+<div>
+  <%= link_to "Show this material", @material %> |
+  <%= link_to "Back to materials", materials_path %>
+</div>
+
+Vista: materials/index.html.erb
+<p style="color: green"><%= notice %></p>
+
+<h1>Materials</h1>
+
+<div id="materials">
+  <% @materials.each do |material| %>
+    <%= render material %>
+    <p>
+      <%= link_to "Show this material", material %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New material", new_material_path %>
+
+Vista: materials/index.json.jbuilder
+json.array! @materials, partial: "materials/material", as: :material
+
+Vista: materials/new.html.erb
+<h1>New material</h1>
+
+<%= render "form", material: @material %>
+
+<br>
+
+<div>
+  <%= link_to "Back to materials", materials_path %>
+</div>
+
+Vista: materials/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @material %>
+
+<div>
+  <%= link_to "Edit this material", edit_material_path(@material) %> |
+  <%= link_to "Back to materials", materials_path %>
+
+  <%= button_to "Destroy this material", @material, method: :delete %>
+</div>
+
+Vista: materials/show.json.jbuilder
+json.partial! "materials/material", material: @material
+
+Vista: cities/_city.html.erb
+<div id="<%= dom_id city %>">
+  <p>
+    <strong>Name:</strong>
+    <%= city.name %>
+  </p>
+
+</div>
+
+Vista: cities/_city.json.jbuilder
+json.extract! city, :id, :name, :created_at, :updated_at
+json.url city_url(city, format: :json)
+
+Vista: cities/_form.html.erb
+<%= form_with(model: city) do |form| %>
+  <% if city.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(city.errors.count, "error") %> prohibited this city from being saved:</h2>
+
+      <ul>
+        <% city.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+Vista: cities/edit.html.erb
+<h1>Editing city</h1>
+
+<%= render "form", city: @city %>
+
+<br>
+
+<div>
+  <%= link_to "Show this city", @city %> |
+  <%= link_to "Back to cities", cities_path %>
+</div>
+
+Vista: cities/index.html.erb
+<p style="color: green"><%= notice %></p>
+
+<h1>Cities</h1>
+
+<div id="cities">
+  <% @cities.each do |city| %>
+    <%= render city %>
+    <p>
+      <%= link_to "Show this city", city %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New city", new_city_path %>
+
+Vista: cities/index.json.jbuilder
+json.array! @cities, partial: "cities/city", as: :city
+
+Vista: cities/new.html.erb
+<h1>New city</h1>
+
+<%= render "form", city: @city %>
+
+<br>
+
+<div>
+  <%= link_to "Back to cities", cities_path %>
+</div>
+
+Vista: cities/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @city %>
+
+<div>
+  <%= link_to "Edit this city", edit_city_path(@city) %> |
+  <%= link_to "Back to cities", cities_path %>
+
+  <%= button_to "Destroy this city", @city, method: :delete %>
+</div>
+
+Vista: cities/show.json.jbuilder
+json.partial! "cities/city", city: @city
+
+Vista: confirmations/new.html.erb
+<h2>Resend confirmation instructions</h2>
+
+<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Resend confirmation instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: mailer/confirmation_instructions.html.erb
+<p>Welcome <%= @email %>!</p>
+
+<p>You can confirm your account email through the link below:</p>
+
+<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+Vista: mailer/email_changed.html.erb
+<p>Hello <%= @email %>!</p>
+
+<% if @resource.try(:unconfirmed_email?) %>
+  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+<% else %>
+  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+<% end %>
+
+Vista: mailer/password_change.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>We're contacting you to notify you that your password has been changed.</p>
+
+Vista: mailer/reset_password_instructions.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>Someone has requested a link to change your password. You can do this through the link below.</p>
+
+<p><%= link_to 'Change my password', edit_password_url(@resource, reset_password_token: @token) %></p>
+
+<p>If you didn't request this, please ignore this email.</p>
+<p>Your password won't change until you access the link above and create a new one.</p>
+
+Vista: mailer/unlock_instructions.html.erb
+<p>Hello <%= @resource.email %>!</p>
+
+<p>Your account has been locked due to an excessive number of unsuccessful sign in attempts.</p>
+
+<p>Click the link below to unlock your account:</p>
+
+<p><%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token) %></p>
+
+Vista: passwords/edit.html.erb
+<h2>Change your password</h2>
+
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= f.hidden_field :reset_password_token %>
+
+  <div class="field">
+    <%= f.label :password, "New password" %><br />
+    <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+    <% end %>
+    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation, "Confirm new password" %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Change my password" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: passwords/new.html.erb
+<h2>Forgot your password?</h2>
+
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Send me reset password instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: registrations/edit.html.erb
+<h2>Edit <%= resource_name.to_s.humanize %></h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <br />
+      <em><%= @minimum_password_length %> characters minimum</em>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Update" %>
+  </div>
+<% end %>
+
+<h3>Cancel my account</h3>
+
+<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
+
+<%= link_to "Back", :back %>
+
+Vista: registrations/new.html.erb
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign up" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: sessions/new.html.erb
+<h2>Log in</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password, autocomplete: "current-password" %>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+    <div class="field">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Log in" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: shared/_error_messages.html.erb
+<% if resource.errors.any? %>
+  <div id="error_explanation" data-turbo-cache="false">
+    <h2>
+      <%= I18n.t("errors.messages.not_saved",
+                 count: resource.errors.count,
+                 resource: resource.class.model_name.human.downcase)
+       %>
+    </h2>
+    <ul>
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+Vista: shared/_links.html.erb
+<%- if controller_name != 'sessions' %>
+  <%= link_to "Log in", new_session_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+  <%= link_to "Sign up", new_registration_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+  <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br />
+<% end %>
+
+<%- if devise_mapping.omniauthable? %>
+  <%- resource_class.omniauth_providers.each do |provider| %>
+    <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %><br />
+  <% end %>
+<% end %>
+
+Vista: unlocks/new.html.erb
+<h2>Resend unlock instructions</h2>
+
+<%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Resend unlock instructions" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+Vista: engines/_engine.html.erb
+<div id="<%= dom_id engine %>">
+  <p>
+    <strong>Engine type:</strong>
+    <%= engine.engine_type %>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <%= engine.name %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= engine.description %>
+  </p>
+
+  <p>
+    <strong>Photo:</strong>
+    <%= engine.photo %>
+  </p>
+
+</div>
+
+Vista: engines/_engine.json.jbuilder
+json.extract! engine, :id, :engine_type, :name, :description, :photo, :created_at, :updated_at
+json.url engine_url(engine, format: :json)
+
+Vista: engines/_form.html.erb
+<%= form_for @engine do |f| %>
+  <div class="form-group">
+    <%= f.label :engine_type, 'Tipo de Motor' %>
+    <%= f.select :engine_type, Engine.engine_types.keys, {}, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :name, 'Nombre' %>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description, 'Descripción' %>
+    <%= f.text_area :description, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :photo, 'Foto del Motor' %>
+    <%= f.file_field :photo, class: 'form-control' %>
+  </div>
+  <%= f.submit 'Guardar', class: 'btn btn-primary' %>
+<% end %>
+
+Vista: engines/edit.html.erb
+<h1>Editing engine</h1>
+
+<%= render "form", engine: @engine %>
+
+<br>
+
+<div>
+  <%= link_to "Show this engine", @engine %> |
+  <%= link_to "Back to engines", engines_path %>
+</div>
+
+Vista: engines/index.html.erb
+<div class="container">
+  <h1 class="mt-4">Listado de Motores</h1>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Tipo de Motor</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Foto</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @engines.each do |engine| %>
+        <tr>
+          <td><%= engine.engine_type %></td>
+          <td><%= engine.name %></td>
+          <td><%= engine.description %></td>
+          <td><%= image_tag(engine.photo.url, class: 'img-thumbnail') if engine.photo.present? %></td>
+          <td>
+            <%= link_to 'Mostrar', engine, class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Editar', edit_engine_path(engine), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Eliminar', engine, method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%# <%= link_to 'Nuevo Motor', new_engine_path, class: 'btn btn-success' %> 
+</div>
+
+Vista: engines/index.json.jbuilder
+json.array! @engines, partial: "engines/engine", as: :engine
+
+Vista: engines/new.html.erb
+<h1>New engine</h1>
+
+<%= render "form", engine: @engine %>
+
+<br>
+
+<div>
+  <%= link_to "Back to engines", engines_path %>
+</div>
+
+Vista: engines/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @engine %>
+
+<div>
+  <%= link_to "Edit this engine", edit_engine_path(@engine) %> |
+  <%= link_to "Back to engines", engines_path %>
+
+  <%= button_to "Destroy this engine", @engine, method: :delete %>
+</div>
+
+Vista: engines/show.json.jbuilder
+json.partial! "engines/engine", engine: @engine
+
+Vista: layouts/application.html.erb
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JetMaintain</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  
+  
+<%= javascript_include_tag 'engines' %>
+
+  
+  </head>
+
+  <body>
+<p class="notice"><%= notice %></p>
+       <p class="alert"><%= alert %></p>
+    <%= yield %>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/78ae44b048.js" crossorigin="anonymous"></script>
+
+
+  </body>
+</html>
+
+Vista: layouts/mailer.html.erb
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      /* Email styles need to be inline */
+    </style>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
+
+Vista: layouts/mailer.text.erb
+<%= yield %>
+
+Vista: maintenances/_form.html.erb
+<%= form_with(model: maintenance) do |form| %>
+  <% if maintenance.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(maintenance.errors.count, "error") %> prohibited this maintenance from being saved:</h2>
+
+      <ul>
+        <% maintenance.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :maintenance_type, style: "display: block" %>
+    <%= form.text_field :maintenance_type %>
+  </div>
+
+  <div>
+    <%= form.label :engine_id, style: "display: block" %>
+    <%= form.text_field :engine_id %>
+  </div>
+
+  <div>
+    <%= form.label :city_id, style: "display: block" %>
+    <%= form.text_field :city_id %>
+  </div>
+
+  <div>
+    <%= form.label :materials_id, style: "display: block" %>
+    <%= form.text_field :materials_id %>
+  </div>
+
+  <div>
+    <%= form.label :maintenance_date, style: "display: block" %>
+    <%= form.date_field :maintenance_date %>
+  </div>
+
+  <div>
+    <%= form.label :technician_email, style: "display: block" %>
+    <%= form.text_field :technician_email %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+
+Vista: maintenances/_maintenance.html.erb
+<div id="<%= dom_id maintenance %>">
+  <p>
+    <strong>Maintenance type:</strong>
+    <%= maintenance.maintenance_type %>
+  </p>
+
+  <p>
+    <strong>Engine:</strong>
+    <%= maintenance.engine_id %>
+  </p>
+
+  <p>
+    <strong>City:</strong>
+    <%= maintenance.city_id %>
+  </p>
+
+  <p>
+    <strong>Materials:</strong>
+    <%= maintenance.materials_id %>
+  </p>
+
+  <p>
+    <strong>Maintenance date:</strong>
+    <%= maintenance.maintenance_date %>
+  </p>
+
+  <p>
+    <strong>Technician email:</strong>
+    <%= maintenance.technician_email %>
+  </p>
+
+</div>
+
+Vista: maintenances/_maintenance.json.jbuilder
+json.extract! maintenance, :id, :maintenance_type, :engine_id, :city_id, :materials_id, :maintenance_date, :technician_email, :created_at, :updated_at
+json.url maintenance_url(maintenance, format: :json)
+
+Vista: maintenances/edit.html.erb
+<h1>Editing maintenance</h1>
+
+<%= render "form", maintenance: @maintenance %>
+
+<br>
+
+<div>
+  <%= link_to "Show this maintenance", @maintenance %> |
+  <%= link_to "Back to maintenances", maintenances_path %>
+</div>
+
+Vista: maintenances/index.html.erb
+<div class="container">
+  <h1 class="mt-4">Listado de Mantenimientos de Motores</h1>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Tipo de Motor</th>
+        <th>Tipo de Mantenimiento</th>
+        <th>Nombre del Motor</th>
+        <th>Foto</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @maintenances.each do |maintenance| %>
+        <tr>
+          <td><%= maintenance.engine.engine_type %></td>
+          <td><%= maintenance.maintenance_type %></td>
+          <td><%= maintenance.engine.name %></td>
+          <td><%= image_tag(maintenance.engine.photo.url, class: 'img-thumbnail') if maintenance.engine.photo.present? %></td>
+          <td>
+            <%= link_to 'Mostrar', maintenance, class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Editar', edit_maintenance_path(maintenance), class: 'btn btn-warning btn-sm' %>
+            <%= link_to 'Eliminar', maintenance, method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'Nuevo Mantenimiento', new_maintenance_path, class: 'btn btn-success' %>
+</div>
+
+Vista: maintenances/index.json.jbuilder
+json.array! @maintenances, partial: "maintenances/maintenance", as: :maintenance
+
+Vista: maintenances/new.html.erb
+<h1>New maintenance</h1>
+
+<%= render "form", maintenance: @maintenance %>
+
+<br>
+
+<div>
+  <%= link_to "Back to maintenances", maintenances_path %>
+</div>
+
+Vista: maintenances/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @maintenance %>
+
+<div>
+  <%= link_to "Edit this maintenance", edit_maintenance_path(@maintenance) %> |
+  <%= link_to "Back to maintenances", maintenances_path %>
+
+  <%= button_to "Destroy this maintenance", @maintenance, method: :delete %>
+</div>
+
+Vista: maintenances/show.json.jbuilder
+json.partial! "maintenances/maintenance", maintenance: @maintenance
+
+Vista: materials/_form.html.erb
+<%= form_for @material do |f| %>
+  <div class="form-group">
+    <%= f.label :name, 'Nombre del Material' %>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+  <%= f.submit 'Guardar', class: 'btn btn-primary' %>
+<% end %>
+
+Vista: materials/_material.html.erb
+<div id="<%= dom_id material %>">
+  <p>
+    <strong>Name:</strong>
+    <%= material.name %>
+  </p>
+
+</div>
+
+Vista: materials/_material.json.jbuilder
+json.extract! material, :id, :name, :created_at, :updated_at
+json.url material_url(material, format: :json)
+
+Vista: materials/edit.html.erb
+<h1>Editing material</h1>
+
+<%= render "form", material: @material %>
+
+<br>
+
+<div>
+  <%= link_to "Show this material", @material %> |
+  <%= link_to "Back to materials", materials_path %>
+</div>
+
+Vista: materials/index.html.erb
+<p style="color: green"><%= notice %></p>
+
+<h1>Materials</h1>
+
+<div id="materials">
+  <% @materials.each do |material| %>
+    <%= render material %>
+    <p>
+      <%= link_to "Show this material", material %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New material", new_material_path %>
+
+Vista: materials/index.json.jbuilder
+json.array! @materials, partial: "materials/material", as: :material
+
+Vista: materials/new.html.erb
+<h1>New material</h1>
+
+<%= render "form", material: @material %>
+
+<br>
+
+<div>
+  <%= link_to "Back to materials", materials_path %>
+</div>
+
+Vista: materials/show.html.erb
+<p style="color: green"><%= notice %></p>
+
+<%= render @material %>
+
+<div>
+  <%= link_to "Edit this material", edit_material_path(@material) %> |
+  <%= link_to "Back to materials", materials_path %>
+
+  <%= button_to "Destroy this material", @material, method: :delete %>
+</div>
+
+Vista: materials/show.json.jbuilder
+json.partial! "materials/material", material: @material
+
